@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Transaction Modal - Personal Finance Tracker">
+    <title>Add Transaction - Personal Finance Tracker</title>
+    <link rel="stylesheet" href="../css/main.css">
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpersonalf2217back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.12"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-primary to-secondary shadow-md sticky top-0 z-sticky">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="finance_dashboard.html" class="flex items-center gap-3 focus-ring rounded-sm">
+                    <svg class="w-10 h-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="40" height="40" rx="8" fill="#D4A574"/>
+                        <path d="M20 8L28 14V26L20 32L12 26V14L20 8Z" fill="#2D5A3D"/>
+                        <circle cx="20" cy="20" r="6" fill="#D4A574"/>
+                        <text x="20" y="24" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#2D5A3D" text-anchor="middle">$</text>
+                    </svg>
+                    <h1 class="text-xl font-heading font-semibold text-white">Finance Tracker</h1>
+                </a>
+                
+                <!-- Back to Dashboard Button -->
+                <a href="finance_dashboard.html" class="btn btn-accent flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span class="hidden sm:inline">Back to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="bg-primary-100 p-3 rounded-lg">
+                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-heading font-semibold text-text-primary">Add New Transaction</h1>
+                    <p class="text-sm text-text-secondary mt-1">Record your income or expense transaction</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Form Card -->
+        <div class="card">
+            <form id="addTransactionForm" class="space-y-6" novalidate>
+                <!-- Transaction Type Selection -->
+                <div>
+                    <label class="label mb-4" id="transactionTypeLabel">Transaction Type <span class="text-error">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="radiogroup" aria-labelledby="transactionTypeLabel">
+                        <button type="button" 
+                                class="type-btn border-2 border-border-secondary rounded-sm p-6 flex flex-col items-center gap-3 transition-all duration-base hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary touch-target" 
+                                data-type="deposit"
+                                role="radio"
+                                aria-checked="false"
+                                tabindex="0">
+                            <div class="bg-success-100 p-4 rounded-lg">
+                                <svg class="w-10 h-10 text-success" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M7 14l5-5 5 5H7z"/>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <span class="font-heading font-semibold text-lg block mb-1">Deposit</span>
+                                <span class="text-xs text-text-secondary">Add income or savings</span>
+                            </div>
+                        </button>
+                        <button type="button" 
+                                class="type-btn border-2 border-border-secondary rounded-sm p-6 flex flex-col items-center gap-3 transition-all duration-base hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary touch-target" 
+                                data-type="withdraw"
+                                role="radio"
+                                aria-checked="false"
+                                tabindex="-1">
+                            <div class="bg-error-100 p-4 rounded-lg">
+                                <svg class="w-10 h-10 text-error" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M7 10l5 5 5-5H7z"/>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <span class="font-heading font-semibold text-lg block mb-1">Withdraw</span>
+                                <span class="text-xs text-text-secondary">Record an expense</span>
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden" id="transactionType" name="type" required aria-required="true">
+                    <p id="typeError" class="text-xs text-error mt-2 hidden" role="alert" aria-live="polite">
+                        <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Please select a transaction type
+                    </p>
+                </div>
+
+                <!-- Amount Input -->
+                <div>
+                    <label class="label" for="amount">Amount (USD) <span class="text-error">*</span></label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary font-mono text-lg" aria-hidden="true">$</span>
+                        <input type="number" 
+                               id="amount" 
+                               name="amount" 
+                               class="input pl-12 w-full text-lg font-mono tabular-nums" 
+                               placeholder="0.00" 
+                               step="0.01" 
+                               min="0.01" 
+                               required
+                               aria-required="true"
+                               aria-describedby="amountError amountHelp"
+                               inputmode="decimal">
+                    </div>
+                    <p id="amountHelp" class="text-xs text-text-tertiary mt-1">Enter the transaction amount in US dollars</p>
+                    <p id="amountError" class="text-xs text-error mt-1 hidden" role="alert" aria-live="polite">
+                        <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Please enter a valid amount greater than $0.00
+                    </p>
+                </div>
+
+                <!-- Category Selection -->
+                <div>
+                    <label class="label" for="category">Category <span class="text-error">*</span></label>
+                    <div class="relative">
+                        <select id="category" 
+                                name="category" 
+                                class="input w-full appearance-none pr-10" 
+                                required
+                                aria-required="true"
+                                aria-describedby="categoryError categoryHelp">
+                            <option value="">Select a category</option>
+                            <option value="Food">🍔 Food & Dining</option>
+                            <option value="Travel">✈️ Travel & Transportation</option>
+                            <option value="Shopping">🛍️ Shopping & Entertainment</option>
+                            <option value="Rent">🏠 Rent & Utilities</option>
+                            <option value="Others">📦 Others</option>
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p id="categoryHelp" class="text-xs text-text-tertiary mt-1">Choose the category that best describes this transaction</p>
+                    <p id="categoryError" class="text-xs text-error mt-1 hidden" role="alert" aria-live="polite">
+                        <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Please select a category
+                    </p>
+                </div>
+
+                <!-- Transaction Date -->
+                <div>
+                    <label class="label" for="transactionDate">Transaction Date <span class="text-error">*</span></label>
+                    <div class="relative">
+                        <input type="date" 
+                               id="transactionDate" 
+                               name="date" 
+                               class="input w-full" 
+                               required
+                               aria-required="true"
+                               aria-describedby="dateHelp">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p id="dateHelp" class="text-xs text-text-tertiary mt-1">When did this transaction occur?</p>
+                </div>
+
+                <!-- Description (Optional) -->
+                <div>
+                    <label class="label" for="description">Description <span class="text-text-tertiary">(Optional)</span></label>
+                    <input type="text" 
+                           id="description" 
+                           name="description" 
+                           class="input w-full" 
+                           placeholder="e.g., Grocery shopping at Whole Foods"
+                           maxlength="100"
+                           aria-describedby="descriptionHelp">
+                    <p id="descriptionHelp" class="text-xs text-text-tertiary mt-1">Add additional details about this transaction</p>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border-primary">
+                    <a href="finance_dashboard.html" class="btn btn-secondary flex-1 justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary flex-1 justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Save Transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Tips Card -->
+        <div class="card mt-6 bg-gradient-to-br from-primary-50 to-secondary-50 border-primary-200">
+            <div class="flex items-start gap-4">
+                <div class="bg-primary-200 p-3 rounded-lg flex-shrink-0">
+                    <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-heading font-semibold text-text-primary mb-2">Quick Tips</h3>
+                    <ul class="space-y-2 text-sm text-text-secondary">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Choose <strong>Deposit</strong> for income, salary, or money received</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Select <strong>Withdraw</strong> for expenses, bills, or money spent</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-success flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Add descriptions to help you remember transaction details later</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Toast (Hidden by default) -->
+    <div id="successToast" class="fixed bottom-6 right-6 bg-success text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 transform translate-y-32 transition-transform duration-base z-toast" role="alert" aria-live="polite">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="font-medium">Transaction saved successfully!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-border-primary mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="40" height="40" rx="8" fill="#D4A574"/>
+                        <path d="M20 8L28 14V26L20 32L12 26V14L20 8Z" fill="#2D5A3D"/>
+                        <circle cx="20" cy="20" r="6" fill="#D4A574"/>
+                        <text x="20" y="24" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#2D5A3D" text-anchor="middle">$</text>
+                    </svg>
+                    <p class="text-sm text-text-secondary">© 2025 Finance Tracker. All Rights Reserved.</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="finance_dashboard.html" class="text-sm text-text-secondary hover:text-primary transition-colors duration-fast focus-ring rounded-sm">Dashboard</a>
+                    <a href="javascript:void(0)" class="text-sm text-text-secondary hover:text-primary transition-colors duration-fast focus-ring rounded-sm">Privacy</a>
+                    <a href="javascript:void(0)" class="text-sm text-text-secondary hover:text-primary transition-colors duration-fast focus-ring rounded-sm">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // LocalStorage key
+        const STORAGE_KEY = 'financeTrackerTransactions';
+        
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('transactionDate');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            dateInput.max = today; // Prevent future dates
+            
+            initializeEventListeners();
+        });
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Transaction type buttons
+            const typeButtons = document.querySelectorAll('.type-btn');
+            typeButtons.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    selectTransactionType(this);
+                });
+                
+                // Keyboard navigation
+                btn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectTransactionType(this);
+                    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const nextBtn = typeButtons[(index + 1) % typeButtons.length];
+                        nextBtn.focus();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prevBtn = typeButtons[(index - 1 + typeButtons.length) % typeButtons.length];
+                        prevBtn.focus();
+                    }
+                });
+            });
+
+            // Form submission
+            document.getElementById('addTransactionForm').addEventListener('submit', handleFormSubmit);
+
+            // Real-time validation
+            document.getElementById('amount').addEventListener('input', function() {
+                if (this.value && parseFloat(this.value) > 0) {
+                    hideError('amountError');
+                    this.classList.remove('input-error');
+                }
+            });
+
+            document.getElementById('category').addEventListener('change', function() {
+                if (this.value) {
+                    hideError('categoryError');
+                    this.classList.remove('input-error');
+                }
+            });
+        }
+
+        // Select transaction type
+        function selectTransactionType(button) {
+            const type = button.dataset.type;
+            
+            // Update button states
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-primary-50');
+                btn.classList.add('border-border-secondary');
+                btn.setAttribute('aria-checked', 'false');
+                btn.setAttribute('tabindex', '-1');
+            });
+            
+            button.classList.remove('border-border-secondary');
+            button.classList.add('border-primary', 'bg-primary-50');
+            button.setAttribute('aria-checked', 'true');
+            button.setAttribute('tabindex', '0');
+            
+            // Update hidden input
+            document.getElementById('transactionType').value = type;
+            hideError('typeError');
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const type = document.getElementById('transactionType').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('transactionDate').value;
+            const description = document.getElementById('description').value.trim();
+
+            // Validation
+            let isValid = true;
+
+            if (!type) {
+                showError('typeError');
+                isValid = false;
+            }
+
+            if (!amount || amount <= 0) {
+                showError('amountError');
+                document.getElementById('amount').classList.add('input-error');
+                isValid = false;
+            }
+
+            if (!category) {
+                showError('categoryError');
+                document.getElementById('category').classList.add('input-error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                // Focus on first error
+                if (!type) {
+                    document.querySelector('.type-btn').focus();
+                } else if (!amount || amount <= 0) {
+                    document.getElementById('amount').focus();
+                } else if (!category) {
+                    document.getElementById('category').focus();
+                }
+                return;
+            }
+
+            // Create transaction object
+            const transaction = {
+                id: Date.now(),
+                type,
+                amount,
+                category,
+                description: description || category,
+                date: formatDate(date)
+            };
+
+            // Save to localStorage
+            saveTransaction(transaction);
+
+            // Show success toast
+            showSuccessToast();
+
+            // Redirect to dashboard after short delay
+            setTimeout(() => {
+                window.location.href = 'finance_dashboard.html';
+            }, 1500);
+        }
+
+        // Save transaction to localStorage
+        function saveTransaction(transaction) {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            const transactions = stored ? JSON.parse(stored) : [];
+            transactions.unshift(transaction);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+        }
+
+        // Format date to MM/DD/YYYY
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US');
+        }
+
+        // Show error message
+        function showError(errorId) {
+            document.getElementById(errorId).classList.remove('hidden');
+        }
+
+        // Hide error message
+        function hideError(errorId) {
+            document.getElementById(errorId).classList.add('hidden');
+        }
+
+        // Show success toast
+        function showSuccessToast() {
+            const toast = document.getElementById('successToast');
+            toast.classList.remove('translate-y-32');
+            toast.classList.add('translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0');
+                toast.classList.add('translate-y-32');
+            }, 3000);
+        }
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
