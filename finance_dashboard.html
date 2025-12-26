@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FinTrack - Premium Personal Finance Manager with advanced analytics and real-time insights">
+    <title>FinTrack - Premium Finance Manager</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpersonalf2217back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.12"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2"></script>
+  </head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+<!-- Header Section -->
+<header class="sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <!-- Logo and Brand -->
+            <div class="flex items-center gap-3 animate-slide-left">
+                <div class="relative logo-3d">
+                    <svg class="w-14 h-14 transform transition-transform duration-500 hover:rotate-12 hover:scale-110 micro-bounce" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient1" x1="0" y1="0" x2="48" y2="48">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="50%" stop-color="#764ba2"/>
+                                <stop offset="100%" stop-color="#f093fb"/>
+                            </linearGradient>
+                            <linearGradient id="logoGradient2" x1="0" y1="0" x2="48" y2="48">
+                                <stop offset="0%" stop-color="#f093fb"/>
+                                <stop offset="50%" stop-color="#764ba2"/>
+                                <stop offset="100%" stop-color="#667eea"/>
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <rect width="48" height="48" rx="12" fill="url(#logoGradient1)" filter="url(#glow)"/>
+                        <path d="M24 14L32 20V28L24 34L16 28V20L24 14Z" fill="#FFFFFF" opacity="0.95"/>
+                        <circle cx="24" cy="24" r="4" fill="url(#logoGradient2)"/>
+                        <circle cx="24" cy="24" r="2" fill="#FFFFFF" opacity="0.8"/>
+                    </svg>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full status-pulse shadow-lg"></div>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black gradient-text">FinTrack</h1>
+                    <p class="text-xs font-semibold bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Premium Finance Manager</p>
+                </div>
+            </div>
+            
+            <!-- Currency Converter Toggle -->
+            <button id="currencyConverterBtn" class="flex items-center gap-2 px-5 py-2.5 premium-button text-white rounded-xl font-semibold text-sm shadow-lg micro-bounce">
+                <svg class="w-5 h-5 micro-rotate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Convert</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Currency Converter Modal -->
+<div id="currencyConverterModal" class="fixed inset-0 glass-modal bg-black bg-opacity-40 hidden z-50 flex items-center justify-center p-4 animate-scale-in">
+    <div class="modal-content rounded-3xl shadow-2xl max-w-md w-full transform transition-all">
+        <div class="p-6 border-b border-gray-200 border-opacity-30">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold gradient-text">Currency Converter</h2>
+                <button id="closeConverterBtn" class="p-2 hover:bg-gray-100 hover:bg-opacity-50 rounded-xl transition-all duration-300 micro-rotate">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Exchange Rate Display -->
+            <div class="chart-container text-center">
+                <p class="text-sm font-semibold text-gray-600 mb-2">Current Exchange Rate</p>
+                <p class="text-3xl font-bold gradient-text">1 USD = <span id="exchangeRateDisplay">83.50</span> INR</p>
+                <button id="updateRateBtn" class="mt-3 text-xs font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-1 mx-auto micro-bounce">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #667eea;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    <span style="color: #667eea;">Update Rate</span>
+                </button>
+            </div>
+            
+            <!-- From Currency -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">From</label>
+                <div class="relative">
+                    <select id="fromCurrency" class="premium-input w-full px-4 py-3 pr-10 rounded-xl focus:outline-none appearance-none font-semibold">
+                        <option value="USD">USD - US Dollar</option>
+                        <option value="INR">INR - Indian Rupee</option>
+                    </select>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
+                <input type="number" id="fromAmount" class="premium-input mt-3 w-full px-4 py-3 rounded-xl focus:outline-none font-semibold" placeholder="Enter amount" step="0.01" min="0">
+            </div>
+            
+            <!-- Swap Button -->
+            <div class="flex justify-center">
+                <button id="swapCurrencyBtn" class="p-4 premium-button text-white rounded-full shadow-lg transform hover:rotate-180 transition-all duration-500 micro-bounce">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- To Currency -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">To</label>
+                <div class="relative">
+                    <select id="toCurrency" class="premium-input w-full px-4 py-3 pr-10 rounded-xl focus:outline-none appearance-none font-semibold">
+                        <option value="INR">INR - Indian Rupee</option>
+                        <option value="USD">USD - US Dollar</option>
+                    </select>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-3 px-4 py-4 chart-container rounded-xl">
+                    <p class="text-3xl font-bold gradient-text" id="convertedAmount">0.00</p>
+                </div>
+            </div>
+            
+            <button id="convertBtn" class="w-full py-4 premium-button text-white font-bold rounded-xl shadow-lg micro-bounce">
+                Convert Currency
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <!-- Financial Summary Cards -->
+    <section id="summaryCards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Income Card -->
+        <div class="glass-card summary-card rounded-3xl p-6 animate-slide-up stagger-1">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-sm font-bold text-green-600 mb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 bg-green-500 rounded-full status-pulse"></span>
+                        Total Income
+                    </p>
+                    <h2 id="totalIncome" class="text-4xl font-black bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent tabular-nums mb-1 number-display">₹0.00</h2>
+                    <p class="text-xs text-green-600 font-semibold">Total earnings so far</p>
+                </div>
+                <div class="icon-container bg-gradient-to-br from-green-500 to-emerald-600 p-4 rounded-2xl shadow-xl micro-bounce">
+                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 14l5-5 5 5H7z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="progress-bar h-1.5 rounded-full"></div>
+        </div>
+
+        <!-- Total Spending Card -->
+        <div class="glass-card summary-card rounded-3xl p-6 animate-slide-up stagger-2">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-sm font-bold text-red-600 mb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 bg-red-500 rounded-full status-pulse"></span>
+                        Total Spending
+                    </p>
+                    <h2 id="totalSpending" class="text-4xl font-black bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent tabular-nums mb-1 number-display">₹0.00</h2>
+                    <p class="text-xs text-red-600 font-semibold">Total expenses so far</p>
+                </div>
+                <div class="icon-container bg-gradient-to-br from-red-500 to-pink-600 p-4 rounded-2xl shadow-xl micro-bounce">
+                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 10l5 5 5-5H7z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="progress-bar h-1.5 rounded-full"></div>
+        </div>
+
+        <!-- Current Balance Card -->
+        <div class="glass-card summary-card rounded-3xl p-6 animate-slide-up stagger-3">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-sm font-bold text-blue-600 mb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-full status-pulse"></span>
+                        Current Balance
+                    </p>
+                    <h2 id="currentBalance" class="text-4xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tabular-nums mb-1 number-display">₹0.00</h2>
+                    <p class="text-xs text-blue-600 font-semibold">Net available funds</p>
+                </div>
+                <div class="icon-container bg-gradient-to-br from-blue-500 to-purple-600 p-4 rounded-2xl shadow-xl micro-bounce">
+                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="progress-bar h-1.5 rounded-full"></div>
+        </div>
+    </section>
+
+    <!-- Transaction Form and Analysis Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Transaction Form -->
+        <section class="glass-strong rounded-3xl p-6 shadow-2xl animate-slide-left">
+            <div class="mb-6">
+                <h3 class="text-2xl font-black gradient-text mb-2">New Transaction</h3>
+                <p class="text-sm text-gray-600 font-semibold">Record your income or expenses</p>
+            </div>
+            <form id="transactionForm" class="space-y-5">
+                <!-- Type -->
+                <div class="relative">
+                    <label class="block text-sm font-bold text-gray-700 mb-2" for="transactionType">Transaction Type</label>
+                    <div class="relative">
+                        <select id="transactionType" name="type" class="premium-input w-full px-4 py-3 pr-10 rounded-xl focus:outline-none appearance-none font-semibold">
+                            <option value="withdraw">💸 Expense / Withdrawal</option>
+                            <option value="deposit">💰 Income / Deposit</option>
+                        </select>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amount -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2" for="amount">Amount (INR)</label>
+                    <div class="relative group">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-black text-lg">₹</span>
+                        <input type="number" id="amount" name="amount" class="premium-input w-full pl-10 pr-4 py-3 rounded-xl focus:outline-none font-semibold" placeholder="0.00" step="0.01" min="0.01" required>
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2" for="category">Category</label>
+                    <div class="relative">
+                        <select id="category" name="category" class="premium-input w-full px-4 py-3 pr-10 rounded-xl focus:outline-none appearance-none font-semibold" required>
+                            <option value="Food & Dining">🍔 Food & Dining</option>
+                            <option value="Shopping">🛍️ Shopping</option>
+                            <option value="Transportation">🚗 Transportation</option>
+                            <option value="Entertainment">🎬 Entertainment</option>
+                            <option value="Bills & Utilities">💡 Bills & Utilities</option>
+                            <option value="Healthcare">⚕️ Healthcare</option>
+                            <option value="Salary">💼 Salary</option>
+                            <option value="Business">📊 Business</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2" for="description">Description</label>
+                    <input type="text" id="description" name="description" class="premium-input w-full px-4 py-3 rounded-xl focus:outline-none font-semibold" placeholder="What was this for?">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full premium-button text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 micro-bounce">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Add Transaction
+                </button>
+            </form>
+        </section>
+
+        <!-- Spending Analysis -->
+        <section class="glass-strong rounded-3xl p-6 shadow-2xl animate-slide-right">
+            <div class="mb-6">
+                <h3 class="text-2xl font-black gradient-text mb-2">Spending Analysis</h3>
+                <p class="text-sm text-gray-600 font-semibold">Expenses Breakdown</p>
+            </div>
+            <div class="relative h-80 flex items-center justify-center">
+                <canvas id="expenseChart" aria-label="Pie chart showing expense breakdown by category"></canvas>
+                <div id="noDataMessage" class="absolute inset-0 flex flex-col items-center justify-center text-center hidden">
+                    <div class="empty-state-icon p-8 rounded-3xl mb-4">
+                        <svg class="w-20 h-20 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 font-bold text-xl mb-1">No expense data yet</p>
+                    <p class="text-sm text-gray-500 font-semibold">Add transactions to see your spending breakdown</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Recent Transactions -->
+    <section class="glass-strong rounded-3xl p-6 shadow-2xl animate-slide-up stagger-4">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h3 class="text-2xl font-black gradient-text">Recent Transactions</h3>
+            </div>
+            <button id="clearAllBtn" class="px-5 py-2.5 text-sm bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl shadow-lg font-bold hidden micro-bounce">
+                Clear All
+            </button>
+        </div>
+        <div id="transactionList" class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar">
+            <!-- Empty State -->
+            <div id="emptyState" class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="empty-state-icon p-10 rounded-3xl mb-4">
+                    <svg class="w-24 h-24 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <p class="text-gray-700 font-bold text-xl mb-2">No transactions yet</p>
+                <p class="text-sm text-gray-500 font-semibold mb-4">Start tracking your finances by adding your first transaction</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+// LocalStorage key
+const STORAGE_KEY = 'finTrackTransactions';
+const EXCHANGE_RATE_KEY = 'finTrackExchangeRate';
+
+// Global variables
+let transactions = [];
+let expenseChart = null;
+let exchangeRate = 83.50;
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', function() {
+    loadTransactions();
+    loadExchangeRate();
+    initializeEventListeners();
+    updateDashboard();
+});
+
+// Load exchange rate
+function loadExchangeRate() {
+    const stored = localStorage.getItem(EXCHANGE_RATE_KEY);
+    exchangeRate = stored ? parseFloat(stored) : 83.50;
+    document.getElementById('exchangeRateDisplay').textContent = exchangeRate.toFixed(2);
+}
+
+// Save exchange rate
+function saveExchangeRate() {
+    localStorage.setItem(EXCHANGE_RATE_KEY, exchangeRate.toString());
+}
+
+// Load transactions
+function loadTransactions() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    transactions = stored ? JSON.parse(stored) : [];
+}
+
+// Save transactions
+function saveTransactions() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+}
+
+// Initialize event listeners
+function initializeEventListeners() {
+    document.getElementById('transactionForm').addEventListener('submit', handleAddTransaction);
+    document.getElementById('clearAllBtn').addEventListener('click', handleClearAll);
+    document.getElementById('currencyConverterBtn').addEventListener('click', openConverterModal);
+    document.getElementById('closeConverterBtn').addEventListener('click', closeConverterModal);
+    document.getElementById('convertBtn').addEventListener('click', convertCurrency);
+    document.getElementById('swapCurrencyBtn').addEventListener('click', swapCurrencies);
+    document.getElementById('updateRateBtn').addEventListener('click', updateExchangeRate);
+    document.getElementById('fromAmount').addEventListener('input', convertCurrency);
+    document.getElementById('fromCurrency').addEventListener('change', convertCurrency);
+    document.getElementById('toCurrency').addEventListener('change', convertCurrency);
+    
+    document.getElementById('currencyConverterModal').addEventListener('click', function(e) {
+        if (e.target === this) closeConverterModal();
+    });
+}
+
+// Currency converter functions
+function openConverterModal() {
+    document.getElementById('currencyConverterModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeConverterModal() {
+    document.getElementById('currencyConverterModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function convertCurrency() {
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+    
+    let convertedAmount = 0;
+    
+    if (fromCurrency === 'USD' && toCurrency === 'INR') {
+        convertedAmount = fromAmount * exchangeRate;
+    } else if (fromCurrency === 'INR' && toCurrency === 'USD') {
+        convertedAmount = fromAmount / exchangeRate;
+    } else {
+        convertedAmount = fromAmount;
+    }
+    
+    document.getElementById('convertedAmount').textContent = formatCurrency(convertedAmount, toCurrency);
+}
+
+function swapCurrencies() {
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    
+    document.getElementById('fromCurrency').value = toCurrency;
+    document.getElementById('toCurrency').value = fromCurrency;
+    
+    convertCurrency();
+}
+
+function updateExchangeRate() {
+    const newRate = prompt('Enter new exchange rate (1 USD = ? INR):', exchangeRate.toFixed(2));
+    if (newRate && !isNaN(newRate) && parseFloat(newRate) > 0) {
+        exchangeRate = parseFloat(newRate);
+        saveExchangeRate();
+        document.getElementById('exchangeRateDisplay').textContent = exchangeRate.toFixed(2);
+        convertCurrency();
+        showNotification('Exchange rate updated successfully!', 'success');
+    }
+}
+
+function formatCurrency(amount, currency) {
+    const symbol = currency === 'INR' ? '₹' : '$';
+    return `${symbol}${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Show notification with premium styling
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification-toast fixed top-24 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl transform transition-all duration-300 animate-slide-right font-bold`;
+    
+    // Premium gradient backgrounds
+    if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        notification.style.color = 'white';
+    } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        notification.style.color = 'white';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+        notification.style.color = 'white';
+    }
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Handle add transaction
+function handleAddTransaction(e) {
+    e.preventDefault();
+    
+    const type = document.getElementById('transactionType').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+
+    if (!amount || amount <= 0) {
+        showNotification('Please enter a valid amount', 'error');
+        return;
+    }
+
+    const transaction = {
+        id: Date.now(),
+        type,
+        amount,
+        category,
+        description: description || category,
+        date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+
+    transactions.unshift(transaction);
+    saveTransactions();
+    updateDashboard();
+    
+    document.getElementById('transactionForm').reset();
+    document.getElementById('transactionType').value = 'withdraw';
+    
+    showNotification(`Transaction added successfully!`, 'success');
+    
+    setTimeout(() => {
+        const firstTransaction = document.querySelector('#transactionList > div:first-child');
+        if (firstTransaction) {
+            firstTransaction.classList.add('animate-slide-left');
+        }
+    }, 100);
+}
+
+// Handle delete transaction
+function handleDeleteTransaction(id) {
+    if (confirm('Are you sure you want to delete this transaction?')) {
+        transactions = transactions.filter(t => t.id !== id);
+        saveTransactions();
+        updateDashboard();
+        showNotification('Transaction deleted', 'info');
+    }
+}
+
+// Handle clear all
+function handleClearAll() {
+    if (confirm('Are you sure you want to delete all transactions? This action cannot be undone.')) {
+        transactions = [];
+        saveTransactions();
+        updateDashboard();
+        showNotification('All transactions cleared', 'info');
+    }
+}
+
+// Update dashboard
+function updateDashboard() {
+    updateSummaryCards();
+    updateTransactionList();
+    updateChart();
+    
+    const clearBtn = document.getElementById('clearAllBtn');
+    if (transactions.length > 0) {
+        clearBtn.classList.remove('hidden');
+    } else {
+        clearBtn.classList.add('hidden');
+    }
+}
+
+// Update summary cards
+function updateSummaryCards() {
+    const income = transactions
+        .filter(t => t.type === 'deposit')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const spending = transactions
+        .filter(t => t.type === 'withdraw')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const balance = income - spending;
+
+    document.getElementById('totalIncome').textContent = `₹${income.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('totalSpending').textContent = `₹${spending.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('currentBalance').textContent = `₹${balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Update transaction list
+function updateTransactionList() {
+    const listContainer = document.getElementById('transactionList');
+    const emptyState = document.getElementById('emptyState');
+
+    if (transactions.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+    }
+
+    emptyState.classList.add('hidden');
+    listContainer.innerHTML = transactions.map(transaction => `
+        <div class="transaction-card rounded-2xl p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <div class="icon-container flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${transaction.type === 'deposit' ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-red-500 to-pink-600'}">
+                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        ${transaction.type === 'deposit' 
+                            ? '<path d="M7 14l5-5 5 5H7z"/>' 
+                            : '<path d="M7 10l5 5 5-5H7z"/>'}
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                        <p class="font-bold text-gray-900 truncate">${transaction.description}</p>
+                        <span class="premium-badge px-3 py-1 text-white text-xs rounded-full flex-shrink-0 font-bold">${transaction.category}</span>
+                    </div>
+                    <p class="text-xs text-gray-600 font-semibold">${transaction.date}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <p class="text-xl font-black ${transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'} tabular-nums">
+                    ${transaction.type === 'deposit' ? '+' : '-'}₹${transaction.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+                <button onclick="handleDeleteTransaction(${transaction.id})" class="p-2.5 text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-pink-600 rounded-xl transition-all duration-300 transform hover:scale-110 shadow-sm micro-bounce" title="Delete transaction" aria-label="Delete transaction">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Update chart
+function updateChart() {
+    const expenses = transactions.filter(t => t.type === 'withdraw');
+    const noDataMessage = document.getElementById('noDataMessage');
+    const canvas = document.getElementById('expenseChart');
+
+    if (expenses.length === 0) {
+        noDataMessage.classList.remove('hidden');
+        canvas.classList.add('hidden');
+        if (expenseChart) {
+            expenseChart.destroy();
+            expenseChart = null;
+        }
+        return;
+    }
+
+    noDataMessage.classList.add('hidden');
+    canvas.classList.remove('hidden');
+
+    const categoryTotals = expenses.reduce((acc, transaction) => {
+        acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount;
+        return acc;
+    }, {});
+
+    const labels = Object.keys(categoryTotals);
+    const data = Object.values(categoryTotals);
+    
+    // Premium gradient colors
+    const colors = [
+        'rgba(102, 126, 234, 0.9)',
+        'rgba(118, 75, 162, 0.9)',
+        'rgba(240, 147, 251, 0.9)',
+        'rgba(236, 72, 153, 0.9)',
+        'rgba(16, 185, 129, 0.9)',
+        'rgba(245, 158, 11, 0.9)',
+        'rgba(239, 68, 68, 0.9)',
+        'rgba(99, 102, 241, 0.9)',
+        'rgba(20, 184, 166, 0.9)'
+    ];
+
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            data: data,
+            backgroundColor: labels.map((_, index) => colors[index % colors.length]),
+            borderWidth: 4,
+            borderColor: 'rgba(255, 255, 255, 0.95)',
+            hoverOffset: 25,
+            hoverBorderWidth: 5
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 13,
+                            weight: '700'
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        color: '#374151'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: '#1f2937',
+                    bodyColor: '#374151',
+                    padding: 16,
+                    titleFont: {
+                        size: 15,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 14,
+                        weight: '600'
+                    },
+                    borderColor: 'rgba(102, 126, 234, 0.3)',
+                    borderWidth: 2,
+                    cornerRadius: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ₹${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 1200,
+                easing: 'easeInOutQuart'
+            }
+        }
+    };
+
+    if (expenseChart) {
+        expenseChart.destroy();
+    }
+
+    const ctx = canvas.getContext('2d');
+    expenseChart = new Chart(ctx, config);
+}
+</script>
+
+<style>
+    * {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Premium Background with Animated Gradient Mesh */
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Glassmorphism Base */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 
+            0 8px 32px 0 rgba(31, 38, 135, 0.15),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .glass-strong {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+    }
+
+    /* Premium Header with Glassmorphism */
+    header {
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Enhanced Logo with 3D Effect */
+    .logo-3d {
+        filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+        transform-style: preserve-3d;
+    }
+
+    .logo-3d:hover {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+        50% { transform: translateY(-10px) rotateZ(5deg); }
+    }
+
+    /* Premium Gradient Text */
+    .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% auto;
+        animation: gradientFlow 3s linear infinite;
+    }
+
+    @keyframes gradientFlow {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+    }
+
+    /* Premium Button with Hover Effects */
+    .premium-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 
+            0 4px 15px rgba(102, 126, 234, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .premium-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .premium-button:hover::before {
+        left: 100%;
+    }
+
+    .premium-button:hover {
+        box-shadow: 
+            0 6px 25px rgba(102, 126, 234, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Enhanced Summary Cards with 3D Effect */
+    .summary-card {
+        position: relative;
+        transform-style: preserve-3d;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .summary-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .summary-card:hover::before {
+        opacity: 1;
+    }
+
+    .summary-card:hover {
+        transform: translateY(-8px) rotateX(2deg);
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Animated Icon Containers */
+    .icon-container {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+        position: relative;
+        overflow: hidden;
+    }
+
+    .icon-container::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Premium Number Display with Glow */
+    .number-display {
+        text-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        letter-spacing: -0.02em;
+    }
+
+    /* Glassmorphism Modal */
+    .glass-modal {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(30px) saturate(180%);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
+        box-shadow: 
+            0 24px 48px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Enhanced Form Inputs */
+    .premium-input {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .premium-input:focus {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(102, 126, 234, 0.6);
+        box-shadow: 
+            0 0 0 4px rgba(102, 126, 234, 0.1),
+            0 4px 12px rgba(102, 126, 234, 0.15);
+        transform: translateY(-1px);
+    }
+
+    /* Animated Progress Bar */
+    .progress-bar {
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        background-size: 200% 100%;
+        animation: progressFlow 2s linear infinite;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    }
+
+    @keyframes progressFlow {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+    }
+
+    /* Transaction Card Hover Effect */
+    .transaction-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(249, 250, 251, 0.9));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .transaction-card:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(249, 250, 251, 1));
+        border-color: rgba(102, 126, 234, 0.3);
+        box-shadow: 
+            0 8px 24px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        transform: translateX(4px);
+    }
+
+    /* Enhanced Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #667eea, #764ba2);
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #764ba2, #f093fb);
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    }
+
+    /* Pulse Animation for Status Indicators */
+    .status-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+    }
+
+    /* Shimmer Loading Effect */
+    .shimmer {
+        background: linear-gradient(90deg, 
+            rgba(255, 255, 255, 0) 0%, 
+            rgba(255, 255, 255, 0.4) 50%, 
+            rgba(255, 255, 255, 0) 100%);
+        background-size: 200% 100%;
+        animation: shimmerFlow 2s infinite;
+    }
+
+    @keyframes shimmerFlow {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    /* Enhanced Chart Container */
+    .chart-container {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 1.5rem;
+        box-shadow: 
+            0 8px 32px rgba(31, 38, 135, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Micro Interactions */
+    .micro-bounce:hover {
+        animation: microBounce 0.6s ease-in-out;
+    }
+
+    @keyframes microBounce {
+        0%, 100% { transform: translateY(0); }
+        25% { transform: translateY(-5px); }
+        50% { transform: translateY(0); }
+        75% { transform: translateY(-2px); }
+    }
+
+    .micro-rotate:hover {
+        animation: microRotate 0.5s ease-in-out;
+    }
+
+    @keyframes microRotate {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    /* Enhanced Empty State */
+    .empty-state-icon {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+        backdrop-filter: blur(10px);
+    }
+
+    /* Premium Badge */
+    .premium-badge {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        box-shadow: 
+            0 4px 12px rgba(102, 126, 234, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* Notification Toast with Glassmorphism */
+    .notification-toast {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Hide number input arrows */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .summary-card:hover {
+            transform: translateY(-4px);
+        }
+    }
+
+    /* Enhanced stagger animations */
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+
+    /* Slide animations */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-slide-up { animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    .animate-slide-left { animation: slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .animate-slide-right { animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .animate-scale-in { animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+</style>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
