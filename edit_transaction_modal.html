@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Edit Transaction Modal - Modify existing financial transactions with validation">
+    <title>Edit Transaction - Personal Finance Tracker</title>
+    <link rel="stylesheet" href="../css/main.css">
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpersonalf2217back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.12"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-primary to-secondary shadow-md sticky top-0 z-sticky">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="finance_dashboard.html" class="flex items-center gap-3 focus-ring rounded-sm">
+                    <svg class="w-10 h-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="#D4A574"/>
+                        <path d="M20 8L28 14V26L20 32L12 26V14L20 8Z" fill="#2D5A3D"/>
+                        <circle cx="20" cy="20" r="6" fill="#D4A574"/>
+                        <text x="20" y="24" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#2D5A3D" text-anchor="middle">$</text>
+                    </svg>
+                    <h1 class="text-xl font-heading font-semibold text-white">Finance Tracker</h1>
+                </a>
+                
+                <!-- Back to Dashboard -->
+                <a href="finance_dashboard.html" class="btn btn-accent flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <span class="hidden sm:inline">Back to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="bg-primary-100 p-3 rounded-lg">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-heading font-semibold text-text-primary">Edit Transaction</h2>
+                    <p class="text-sm text-text-secondary mt-1">Modify your financial transaction details</p>
+                </div>
+            </div>
+            <div class="h-1 w-24 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+        </div>
+
+        <!-- Edit Transaction Form Card -->
+        <div class="card">
+            <!-- Transaction Info Banner -->
+            <div id="transactionInfoBanner" class="bg-primary-50 border border-primary-200 rounded-sm p-4 mb-6 flex items-start gap-3">
+                <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-primary-700 mb-1">Transaction Details</p>
+                    <div class="text-xs text-primary-600 space-y-1">
+                        <p>Transaction ID: <span id="displayTransactionId" class="font-mono font-medium">-</span></p>
+                        <p>Created: <span id="displayCreatedDate" class="font-medium">-</span></p>
+                        <p>Last Modified: <span id="displayModifiedDate" class="font-medium">-</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="editTransactionForm" class="space-y-6">
+                <input type="hidden" id="editTransactionId">
+                <input type="hidden" id="originalCreatedDate">
+                
+                <!-- Transaction Type -->
+                <div>
+                    <label class="label" for="editTransactionType">
+                        Transaction Type <span class="text-error">*</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button type="button" class="edit-type-btn border-2 border-border-secondary rounded-sm p-5 flex flex-col items-center gap-3 transition-all duration-base hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary touch-target" data-type="deposit" aria-label="Select deposit transaction type">
+                            <div class="bg-success-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-success" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7 14l5-5 5 5H7z"/>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <span class="font-medium text-text-primary block mb-1">Deposit</span>
+                                <span class="text-xs text-text-secondary">Income & Savings</span>
+                            </div>
+                        </button>
+                        <button type="button" class="edit-type-btn border-2 border-border-secondary rounded-sm p-5 flex flex-col items-center gap-3 transition-all duration-base hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary touch-target" data-type="withdraw" aria-label="Select withdrawal transaction type">
+                            <div class="bg-error-100 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-error" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7 10l5 5 5-5H7z"/>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <span class="font-medium text-text-primary block mb-1">Withdraw</span>
+                                <span class="text-xs text-text-secondary">Expenses & Payments</span>
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden" id="editTransactionType" name="type" required>
+                    <p id="typeError" class="text-xs text-error mt-2 hidden flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Please select a transaction type
+                    </p>
+                </div>
+
+                <!-- Amount -->
+                <div>
+                    <label class="label" for="editAmount">
+                        Amount (USD) <span class="text-error">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary font-mono text-lg">$</span>
+                        <input type="number" id="editAmount" name="amount" class="input pl-12 w-full text-lg font-mono tabular-nums" placeholder="0.00" step="0.01" min="0.01" required aria-describedby="amountHelp amountError">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary text-xs">
+                            USD
+                        </div>
+                    </div>
+                    <p id="amountHelp" class="text-xs text-text-secondary mt-2 flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        Enter amount with up to 2 decimal places
+                    </p>
+                    <p id="amountError" class="text-xs text-error mt-2 hidden flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Please enter a valid amount greater than $0.00
+                    </p>
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="label" for="editCategory">
+                        Category <span class="text-error">*</span>
+                    </label>
+                    <div class="relative">
+                        <select id="editCategory" name="category" class="input w-full appearance-none pr-10" required aria-describedby="categoryError">
+                            <option value="">Select a category</option>
+                            <option value="Food">🍔 Food & Dining</option>
+                            <option value="Travel">✈️ Travel & Transportation</option>
+                            <option value="Shopping">🛍️ Shopping & Retail</option>
+                            <option value="Rent">🏠 Rent & Housing</option>
+                            <option value="Utilities">💡 Utilities & Bills</option>
+                            <option value="Healthcare">🏥 Healthcare & Medical</option>
+                            <option value="Entertainment">🎬 Entertainment & Leisure</option>
+                            <option value="Education">📚 Education & Learning</option>
+                            <option value="Savings">💰 Savings & Investments</option>
+                            <option value="Others">📦 Others</option>
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p id="categoryError" class="text-xs text-error mt-2 hidden flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Please select a category
+                    </p>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="label" for="editDescription">
+                        Description <span class="text-text-tertiary text-xs">(Optional)</span>
+                    </label>
+                    <div class="relative">
+                        <textarea id="editDescription" name="description" class="input w-full min-h-[100px] resize-y" placeholder="e.g., Weekly grocery shopping at Whole Foods" maxlength="200" aria-describedby="descriptionHelp"></textarea>
+                        <div class="absolute bottom-3 right-3 text-xs text-text-tertiary">
+                            <span id="charCount">0</span>/200
+                        </div>
+                    </div>
+                    <p id="descriptionHelp" class="text-xs text-text-secondary mt-2 flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        Add notes to help you remember this transaction
+                    </p>
+                </div>
+
+                <!-- Transaction Date -->
+                <div>
+                    <label class="label" for="editDate">
+                        Transaction Date <span class="text-error">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="date" id="editDate" name="date" class="input w-full" required aria-describedby="dateError">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p id="dateError" class="text-xs text-error mt-2 hidden flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Please select a valid date
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border-primary">
+                    <button type="button" id="deleteTransactionBtn" class="btn btn-error flex items-center justify-center gap-2 sm:order-1 touch-target" aria-label="Delete this transaction">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        <span>Delete Transaction</span>
+                    </button>
+                    <div class="flex gap-4 flex-1 sm:order-2">
+                        <a href="finance_dashboard.html" class="btn btn-secondary flex-1 touch-target">Cancel</a>
+                        <button type="submit" class="btn btn-primary flex-1 flex items-center justify-center gap-2 touch-target">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Update Transaction</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Help Section -->
+        <div class="card mt-8 bg-gradient-to-br from-primary-50 to-secondary-50 border-primary-200">
+            <div class="flex items-start gap-4">
+                <div class="bg-primary-100 p-3 rounded-lg flex-shrink-0">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-heading font-semibold text-text-primary mb-2">Editing Tips</h3>
+                    <ul class="text-sm text-text-secondary space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                            <span>All changes are saved immediately to your browser's local storage</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                            <span>Changing transaction type will automatically update your totals and charts</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                            <span>Use the delete button carefully - this action cannot be undone</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                            <span>Transaction date can be modified to correct past entries</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal-overlay hidden" role="dialog" aria-labelledby="deleteModalTitle" aria-modal="true">
+        <div class="modal max-w-md animate-fade-in">
+            <div class="p-6">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="bg-error-100 p-3 rounded-lg flex-shrink-0">
+                        <svg class="w-8 h-8 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 id="deleteModalTitle" class="text-xl font-heading font-semibold text-text-primary mb-2">Delete Transaction?</h2>
+                        <p class="text-sm text-text-secondary mb-4">Are you sure you want to permanently delete this transaction? This action cannot be undone and will affect your financial totals and charts.</p>
+                        <div class="bg-error-50 border border-error-200 rounded-sm p-3 text-xs text-error-700">
+                            <p class="font-medium mb-1">Transaction Details:</p>
+                            <p id="deleteTransactionDetails">-</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button id="cancelDeleteBtn" class="btn btn-secondary flex-1 touch-target">Cancel</button>
+                    <button id="confirmDeleteBtn" class="btn btn-error flex-1 flex items-center justify-center gap-2 touch-target">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        <span>Delete Permanently</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="successToast" class="fixed top-20 right-4 bg-success text-white px-6 py-4 rounded-sm shadow-lg z-toast hidden animate-fade-in">
+        <div class="flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span id="toastMessage" class="font-medium">Transaction updated successfully!</span>
+        </div>
+    </div>
+
+    <script>
+        // LocalStorage key
+        const STORAGE_KEY = 'financeTrackerTransactions';
+        
+        // Global variables
+        let transactions = [];
+        let currentTransaction = null;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTransactions();
+            loadTransactionFromURL();
+            initializeEventListeners();
+            updateCharacterCount();
+        });
+
+        // Load transactions from localStorage
+        function loadTransactions() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            transactions = stored ? JSON.parse(stored) : [];
+        }
+
+        // Save transactions to localStorage
+        function saveTransactions() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+        }
+
+        // Load transaction from URL parameter
+        function loadTransactionFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const transactionId = urlParams.get('id');
+            
+            if (!transactionId) {
+                showToast('No transaction ID provided', 'error');
+                setTimeout(() => {
+                    window.location.href = 'finance_dashboard.html';
+                }, 2000);
+                return;
+            }
+
+            const transaction = transactions.find(t => t.id === parseInt(transactionId));
+            
+            if (!transaction) {
+                showToast('Transaction not found', 'error');
+                setTimeout(() => {
+                    window.location.href = 'finance_dashboard.html';
+                }, 2000);
+                return;
+            }
+
+            currentTransaction = transaction;
+            populateForm(transaction);
+        }
+
+        // Populate form with transaction data
+        function populateForm(transaction) {
+            document.getElementById('editTransactionId').value = transaction.id;
+            document.getElementById('editAmount').value = transaction.amount;
+            document.getElementById('editCategory').value = transaction.category;
+            document.getElementById('editDescription').value = transaction.description || '';
+            
+            // Set date (convert from MM/DD/YYYY to YYYY-MM-DD for input)
+            const dateParts = transaction.date.split('/');
+            if (dateParts.length === 3) {
+                const formattedDate = `${dateParts[2]}-${dateParts[0].padStart(2, '0')}-${dateParts[1].padStart(2, '0')}`;
+                document.getElementById('editDate').value = formattedDate;
+            }
+            
+            document.getElementById('originalCreatedDate').value = transaction.date;
+            
+            // Set transaction type
+            document.querySelectorAll('.edit-type-btn').forEach(btn => {
+                if (btn.dataset.type === transaction.type) {
+                    btn.classList.remove('border-border-secondary');
+                    btn.classList.add('border-primary', 'bg-primary-50');
+                } else {
+                    btn.classList.remove('border-primary', 'bg-primary-50');
+                    btn.classList.add('border-border-secondary');
+                }
+            });
+            document.getElementById('editTransactionType').value = transaction.type;
+
+            // Update info banner
+            document.getElementById('displayTransactionId').textContent = transaction.id;
+            document.getElementById('displayCreatedDate').textContent = transaction.date;
+            document.getElementById('displayModifiedDate').textContent = transaction.lastModified || transaction.date;
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Form submission
+            document.getElementById('editTransactionForm').addEventListener('submit', handleEditTransaction);
+
+            // Delete button
+            document.getElementById('deleteTransactionBtn').addEventListener('click', openDeleteModal);
+            document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+            document.getElementById('confirmDeleteBtn').addEventListener('click', handleDeleteTransaction);
+
+            // Transaction type buttons
+            document.querySelectorAll('.edit-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.edit-type-btn').forEach(b => {
+                        b.classList.remove('border-primary', 'bg-primary-50');
+                        b.classList.add('border-border-secondary');
+                    });
+                    this.classList.remove('border-border-secondary');
+                    this.classList.add('border-primary', 'bg-primary-50');
+                    document.getElementById('editTransactionType').value = this.dataset.type;
+                    document.getElementById('typeError').classList.add('hidden');
+                });
+            });
+
+            // Character count for description
+            document.getElementById('editDescription').addEventListener('input', updateCharacterCount);
+
+            // Input validation
+            document.getElementById('editAmount').addEventListener('input', function() {
+                document.getElementById('amountError').classList.add('hidden');
+            });
+
+            document.getElementById('editCategory').addEventListener('change', function() {
+                document.getElementById('categoryError').classList.add('hidden');
+            });
+
+            document.getElementById('editDate').addEventListener('change', function() {
+                document.getElementById('dateError').classList.add('hidden');
+            });
+
+            // Close modal on overlay click
+            document.getElementById('deleteConfirmModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeDeleteModal();
+                }
+            });
+        }
+
+        // Update character count
+        function updateCharacterCount() {
+            const description = document.getElementById('editDescription').value;
+            document.getElementById('charCount').textContent = description.length;
+        }
+
+        // Handle edit transaction
+        function handleEditTransaction(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('editTransactionType').value;
+            const amount = parseFloat(document.getElementById('editAmount').value);
+            const category = document.getElementById('editCategory').value;
+            const description = document.getElementById('editDescription').value;
+            const dateInput = document.getElementById('editDate').value;
+
+            // Validation
+            let isValid = true;
+            
+            if (!type) {
+                document.getElementById('typeError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (!amount || amount <= 0) {
+                document.getElementById('amountError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (!category) {
+                document.getElementById('categoryError').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!dateInput) {
+                document.getElementById('dateError').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Convert date from YYYY-MM-DD to MM/DD/YYYY
+            const dateObj = new Date(dateInput);
+            const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+
+            // Update transaction
+            const id = parseInt(document.getElementById('editTransactionId').value);
+            const index = transactions.findIndex(t => t.id === id);
+            
+            if (index !== -1) {
+                const currentDate = new Date().toLocaleDateString('en-US');
+                transactions[index] = {
+                    ...transactions[index],
+                    type,
+                    amount,
+                    category,
+                    description: description || category,
+                    date: formattedDate,
+                    lastModified: currentDate
+                };
+                
+                saveTransactions();
+                showToast('Transaction updated successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'finance_dashboard.html';
+                }, 1500);
+            }
+        }
+
+        // Open delete confirmation modal
+        function openDeleteModal() {
+            if (!currentTransaction) return;
+            
+            const details = `${currentTransaction.type === 'deposit' ? 'Deposit' : 'Withdrawal'} of $${currentTransaction.amount.toFixed(2)} in ${currentTransaction.category} category`;
+            document.getElementById('deleteTransactionDetails').textContent = details;
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+
+        // Close delete confirmation modal
+        function closeDeleteModal() {
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+        }
+
+        // Handle delete transaction
+        function handleDeleteTransaction() {
+            if (!currentTransaction) return;
+            
+            transactions = transactions.filter(t => t.id !== currentTransaction.id);
+            saveTransactions();
+            closeDeleteModal();
+            showToast('Transaction deleted successfully!', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'finance_dashboard.html';
+            }, 1500);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                toast.classList.remove('bg-success');
+                toast.classList.add('bg-error');
+            } else {
+                toast.classList.remove('bg-error');
+                toast.classList.add('bg-success');
+            }
+            
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+
+        /* Custom date input styling */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Textarea resize handle */
+        textarea {
+            resize: vertical;
+        }
+
+        /* Focus states for better accessibility */
+        .edit-type-btn:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* Smooth transitions */
+        .edit-type-btn {
+            transition: all 0.2s ease;
+        }
+
+        .edit-type-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 90, 61, 0.1);
+        }
+
+        .edit-type-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
